@@ -18,6 +18,9 @@ compile: build_dir \
 
 ${BUILD_DIR}/App.o:${SRC_DIR}/App.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/App.cpp -o ${BUILD_DIR}/App.o -I ${INCLUDE_DIR}/
+		
+${BUILD_DIR}/glad.o:${SRC_DIR}/glad.cpp
+	${CC} -std=${STD} -c ${SRC_DIR}/glad.cpp -o ${BUILD_DIR}/glad.o -I ${INCLUDE_DIR}/ -framework Cocoa -framework IOKit -framework CoreVideo -framework OpenGL -Wmacro-redefined
 
 ${BUILD_DIR}/Shader.o:${SRC_DIR}/Shader.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/Shader.cpp -o ${BUILD_DIR}/Shader.o -I ${INCLUDE_DIR}/
@@ -25,32 +28,35 @@ ${BUILD_DIR}/Shader.o:${SRC_DIR}/Shader.cpp
 ${BUILD_DIR}/ShowImage.o:${SRC_DIR}/ShowImage.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/ShowImage.cpp -o ${BUILD_DIR}/ShowImage.o -I ${INCLUDE_DIR}/
 
+${BUILD_DIR}/main.o:${SRC_DIR}/main.cpp
+	${CC} -std=${STD} -c ${SRC_DIR}/main.cpp -o ${BUILD_DIR}/main.o -I ${INCLUDE_DIR}/
+
+link:compile
+	${CC} ${BUILD_DIR}/*.o -o ${BUILD_DIR}/showimage -Llib -lglfw3 -framework Cocoa -framework IOKit -framework CoreVideo -framework OpenGL
+
+run:link
+	${BUILD_DIR}/showimage
+
+clean:
+	rm -f ${BUILD_DIR}/*.o 
+	rm -f ${BUILD_DIR}/showimage
+	rm -rf ${BUILD_DIR}/${OUTPUT}
+
+
+
+
+
+
+
+
+
+
+
+
 ${BUILD_DIR}/glad.o:${SRC_DIR}/glad.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/glad.cpp -o ${BUILD_DIR}/glad.o -I ${INCLUDE_DIR}/
 
 ${BUILD_DIR}/main.o:${SRC_DIR}/main.cpp
 	${CC} -std=${STD} -c ${SRC_DIR}/main.cpp -o ${BUILD_DIR}/main.o -I ${INCLUDE_DIR}/
-
-link:compile
-	${CC} ${BUILD_DIR}/*.o -o ${BUILD_DIR}/showimage.exe -Llib -lglfw3dll
 	
-run:link
-	${BUILD_DIR}/showimage /e/assets/img/songxia.jpg
 
-# test_compile:
-# 	${CC} ${SRC_DIR}/test.cpp -o ${BUILD_DIR}/test -I include/
-	
-# test:test_compile
-# 	${BUILD_DIR}/test
-
-# assemble:link
-# 	mkdir -p ${BUILD_DIR}/${OUTPUT}
-# 	cp -r assets ${BUILD_DIR}/${OUTPUT}
-# 	cp -r shader ${BUILD_DIR}/${OUTPUT}
-# 	cp -r ${BUILD_DIR}/main.exe ${BUILD_DIR}/${OUTPUT}
-# 	cp -r *.dll ${BUILD_DIR}/${OUTPUT}
-
-clean:
-	rm -f ${BUILD_DIR}/*.o 
-	rm -f ${BUILD_DIR}/showimage.exe
-	rm -rf ${BUILD_DIR}/${OUTPUT}

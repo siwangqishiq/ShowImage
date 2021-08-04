@@ -30,7 +30,7 @@ void ShowImage::init(){
         out vec4 fragColor;
         void main(){
             // fragColor = vec4(1.0f , 0.0f , 0.0f , 1.0f);
-            fragColor = vec4(texture(image , vCoord).rgb , 1.0);
+            fragColor = vec4(texture(image , vCoord).r , 0.0 , 0.0 , 1.0);
         }
     );
 
@@ -65,6 +65,8 @@ void ShowImage::reloadImage(std::string path){
     int imageWidth = info.srcWidth;
     int imageHeight = info.srcHeight;
 
+    std::cout << path << " size : " << imageWidth << " x " << imageHeight << std::endl;
+
     float ratio = static_cast<float>(imageWidth) / imageHeight;
     if(ratio >= 1.0f){ // width >= height
         width = mContext->screenWidth;
@@ -80,8 +82,8 @@ void ShowImage::reloadImage(std::string path){
         left = mContext->screenWidth /2.0f - width/2.0f;
     }
 
-    std::cout << "left = " << left << " top = " << top 
-        << " width = " << width << " height = " << height << std::endl;
+    // std::cout << "left = " << left << " top = " << top 
+    //     << " width = " << width << " height = " << height << std::endl;
 
     vertices[0] = left + width;
     vertices[1] = top;

@@ -29,8 +29,8 @@ void ShowImage::init(){
 
         out vec4 fragColor;
         void main(){
-            // fragColor = vec4(1.0f , 0.0f , 0.0f , 1.0f);
-            fragColor = vec4(texture(image , vCoord).r , 0.0 , 0.0 , 1.0);
+            //fragColor = vec4(1.0f , 0.0f , 0.0f , 1.0f);
+            fragColor = vec4(texture(image , vCoord).rgb, 1.0);
         }
     );
 

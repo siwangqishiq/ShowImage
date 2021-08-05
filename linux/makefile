@@ -35,11 +35,10 @@ link:compile
 	${CC} ${BUILD_DIR}/*.o -o ${BUILD_DIR}/showimage -pthread -Llib -lglfw3 -lGLU -lGL -lXrandr -lXxf86vm -lXi -lXinerama -lX11 -lrt -ldl
 
 run:link
-	${BUILD_DIR}/showimage ~/assets/gakki.jpeg
+	${BUILD_DIR}/showimage ../gakki.jpg
 
 clean:
 	rm -f ${BUILD_DIR}/*.o 
 	rm -f ${BUILD_DIR}/showimage
 	rm -rf ${BUILD_DIR}/${OUTPUT}
-	
 

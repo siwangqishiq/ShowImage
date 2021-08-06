@@ -35,7 +35,7 @@ link:compile
 	${CC} ${BUILD_DIR}/*.o -o ${BUILD_DIR}/showimage.exe -Llib -lglfw3dll
 	
 run:link
-	${BUILD_DIR}/showimage /e/assets/img/songxia.jpg
+	${BUILD_DIR}/showimage ../gakki.jpg
 
 # test_compile:
 # 	${CC} ${SRC_DIR}/test.cpp -o ${BUILD_DIR}/test -I include/

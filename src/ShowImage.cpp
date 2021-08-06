@@ -62,7 +62,10 @@ void ShowImage::findImagesInSameDir(std::string path){
         return;
     
     std::string dirPath = findDirectoryPath(path);
-    // std::cout << "search image in dir : " << dirPath << std::endl;
+    if(dirPath.empty()){
+        dirPath = ".";
+    }
+    //std::cout << "search image in dir : " << dirPath << std::endl;
 
     mImageList = std::make_shared<std::vector<std::string>>();
 
@@ -84,9 +87,9 @@ void ShowImage::findImagesInSameDir(std::string path){
         }
     }//end while
 
-    // for(std::string &p : *mImageList){
-    //     std::cout << p << std::endl;
-    // }//end for each
+    for(std::string &p : *mImageList){
+        std::cout << p << std::endl;
+    }//end for each
     closedir(dir);
 
     for(int i = 0 ; i < mImageList->size();i++){

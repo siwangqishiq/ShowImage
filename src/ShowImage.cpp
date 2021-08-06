@@ -1,6 +1,8 @@
 #include "ShowImage.h"
 #include <iostream>
 
+#include <dirent.h>
+
 ShowImage::ShowImage(App *context){
     mContext = context;
 }
@@ -54,10 +56,55 @@ void ShowImage::init(){
     glBindVertexArray(0);
 }
 
+//搜索同一目录下图片文件
+void ShowImage::findImagesInSameDir(std::string path){
+    if(path.empty() || mImageList != nullptr)
+        return;
+    
+    std::string dirPath = findDirectoryPath(path);
+    // std::cout << "search image in dir : " << dirPath << std::endl;
+
+    mImageList = std::make_shared<std::vector<std::string>>();
+
+    DIR *dir = nullptr;
+    dir = opendir(dirPath.c_str());
+
+    if(dir == nullptr)//open dir error
+        return;
+
+    struct dirent *pDir = nullptr;
+    while((pDir = readdir(dir))){
+        std::string imagePath = dirPath + std::string("/") + std::string(pDir->d_name);
+        //std::cout << imagePath << std::endl;
+        if(stringEndWith(imagePath , ".jpg") 
+            || stringEndWith(imagePath , ".jpeg") 
+            || stringEndWith(imagePath , ".gif") 
+            || stringEndWith(imagePath , ".png")){
+            mImageList->push_back(imagePath);
+        }
+    }//end while
+
+    // for(std::string &p : *mImageList){
+    //     std::cout << p << std::endl;
+    // }//end for each
+    closedir(dir);
+
+    for(int i = 0 ; i < mImageList->size();i++){
+        if((*mImageList)[i] == path){
+            currentIndex = i;
+            break;
+        }
+    }//end for i
+
+    // std::cout << "cur pos = " << currentIndex << std::endl;
+}
+
 void ShowImage::reloadImage(std::string path){
-    if(textureId == 0){
-        
+    if(textureId != 0){
+        glDeleteTextures(1 , & textureId);
     }
+
+    currentPath = path;
 
     TextureInfo info = mContext->loadTexture(path , true);
     textureId = info.textureId;
@@ -133,6 +180,34 @@ void ShowImage::free(){
  
     glDeleteVertexArrays(1 , &vao);
     glDeleteBuffers(2 , vbo);
+}
+
+//载入下一张image
+void ShowImage::nextImage(){
+    if(mImageList == nullptr){
+        findImagesInSameDir(currentPath);
+    }
+
+    currentIndex++;
+    if(currentIndex >= mImageList->size()){
+        currentIndex = 0;
+    }
+
+    reloadImage(mImageList->at(currentIndex));
+}
+
+//载入前一张image
+void ShowImage::previousImage(){
+    if(mImageList == nullptr){
+        findImagesInSameDir(currentPath);
+    }
+
+    currentIndex--;
+    if(currentIndex < 0){
+        currentIndex = mImageList->size() - 1;
+    }
+
+    reloadImage((*mImageList)[currentIndex]);
 }
 
 

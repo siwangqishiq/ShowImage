@@ -11,11 +11,13 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0 , 0 , width , height);
 }
 
-static void processInput(GLFWwindow *window) {
+static void processInput(GLFWwindow *window , std::shared_ptr<App> app) {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(window, true);
 		return;
     }
+
+    app->processInput(window);
 }
 
 int main(int argc , char *argv[]) {
@@ -53,13 +55,13 @@ int main(int argc , char *argv[]) {
     app->init();
 
     while (!glfwWindowShouldClose(window)) {
-        processInput(window);
+        processInput(window , app);
 
         app->tick();
-
+        // std::cout << "tick" << std::endl;
         glfwSwapBuffers(window);
         glfwPollEvents();
-    }
+    }//end while
     app->free();
 
 	glfwTerminate();

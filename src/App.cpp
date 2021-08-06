@@ -8,6 +8,8 @@
 void App::init(){
     showImage = std::make_shared<ShowImage>(this);
     showImage->init();
+
+    showImage->findImagesInSameDir(mPath);
     showImage->reloadImage(mPath);
 }
 
@@ -65,10 +67,46 @@ TextureInfo App::loadTexture(std::string path , bool releaseData){
     if(releaseData){
         stbi_image_free(imageData);
     }
-
     
     return info;
 }
+
+//键盘左箭头按键被按下
+void App::onKeyboardLeftClicked(){
+    //std::cout << "left click" << std::endl;
+    showImage->previousImage();
+} 
+
+//键盘右箭头按键被按下
+void App::onKeyboardRightClicked(){
+    //std::cout << "right click" << std::endl;
+    showImage->nextImage();
+}
+
+void App::processInput(GLFWwindow *window){
+    if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
+        isKeyLeftPressed = true;
+		return;
+    }else if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
+        isKeyRightPressed = true;   
+		return;
+    }
+
+    if(isKeyLeftPressed && glfwGetKey(window , GLFW_KEY_LEFT) == GLFW_RELEASE){
+        isKeyLeftPressed = false;
+        onKeyboardLeftClicked();
+        return;
+    }
+
+    if(isKeyRightPressed && glfwGetKey(window , GLFW_KEY_RIGHT) == GLFW_RELEASE){
+        isKeyRightPressed = false;
+        onKeyboardRightClicked();
+        return;
+    }
+}
+
+
+
 
 
 

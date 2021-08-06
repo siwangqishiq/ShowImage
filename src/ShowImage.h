@@ -3,11 +3,11 @@
 #include <memory>
 #include "Shader.h"
 #include "App.h"
+#include <vector>
+#include <string>
 
 class ShowImage{
 private:
-    std::string imagePath;
-
     App *mContext;
 
     float left = 0.0f;
@@ -39,9 +39,17 @@ private:
     unsigned int vbo[2];
 
     unsigned int textureId = 0;
-
+    
+    //同一目录下所有的图片名称
+    std::shared_ptr<std::vector<std::string>> mImageList = nullptr;
+   
+    std::string currentPath;
+    int currentIndex = 0;
 public:
     ShowImage(App *context);
+
+    //
+    void findImagesInSameDir(std::string path);
 
     void init();
 
@@ -49,7 +57,13 @@ public:
 
     void renderImage();
 
-    void free();
+    void free();    
+
+    //载入下一张image
+    void nextImage();
+
+    //载入前一张image
+    void previousImage();
 };
 
 
